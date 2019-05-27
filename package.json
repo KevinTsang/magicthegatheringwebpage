@@ -1,0 +1,36 @@
+{
+  "name": "magicthegatheringwebpage",
+  "version": "1.0.0",
+  "description": "This is a React page that displays Magic The Gathering creature cards with infinite scrolling.",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "Kevin Tsang <kevin@tsangfamily.us> (https://github.com/KevinTsang)",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "mtgsdk": "^0.4.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
