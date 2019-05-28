@@ -13,9 +13,9 @@
   "license": "UNLICENSED",
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "mtgsdk": "^0.4.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-infinite-scroller": "^1.2.4",
     "react-scripts": "^3.0.1"
   },
   "devDependencies": {
