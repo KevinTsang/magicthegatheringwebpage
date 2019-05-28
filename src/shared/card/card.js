@@ -15,12 +15,12 @@ export default class Card extends Component {
 
     render() {
         return (
-            <div className="cardLayout">
+            <div className="card">
+                <div><img src={this.state.imageUrl} alt="Magic: The Gathering Card"/></div>
                 <div>
                     <span>{this.state.name}</span>
                     <span>{this.state.manaCost}</span>
                 </div>
-                <div><img src={this.state.imageUrl} alt="Magic: The Gathering Card"/></div>
                 <div>{this.state.originalType}</div>
                 <div>{this.state.artist}</div>
                 <div>{this.state.setName}</div>

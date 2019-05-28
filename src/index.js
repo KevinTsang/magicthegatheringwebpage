@@ -14,10 +14,14 @@ class App extends Component {
             pageNumber: 0,
             hasMore: true,
             totalCount: 0,
+            name: '',
         };
 
         this.loadCards = this.loadCards.bind(this);
         this.hasMore = this.hasMore.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.findMatchingImageUrl = this.findMatchingImageUrl.bind(this);
+        this.search = this.search.bind(this);
     }
 
     hasMore() {
@@ -25,7 +29,9 @@ class App extends Component {
     }
 
     loadCards(pageNumber) {
-        fetch('https://api.magicthegathering.io/v1/cards?type=creature&pageSize=20&page=' + pageNumber).then((results) => {
+        let url = `https://api.magicthegathering.io/v1/cards?type=creature&pageSize=20&page=${pageNumber}`;
+        url += '&name=' + this.state.name;
+        fetch(url).then((results) => {
             if (pageNumber === 0) {
                 this.setState({
                     totalCount: results.headers.get('Total-Count')
@@ -41,6 +47,31 @@ class App extends Component {
         });
     }
 
+    findMatchingImageUrl(card) {
+        for (let i = 0; i < this.state.cards.length; i++) {
+            if (card.name === this.state.cards[i].name &&
+                this.state.cards[i].imageUrl !== undefined) {
+                return this.state.cards[i].imageUrl;
+            }
+        }
+        return '';
+    }
+
+    handleChange(event) {
+        this.setState({
+            name: event.target.value
+        });
+    }
+
+    search(event) {
+        this.setState({
+            cards: [],
+            pageNumber: 0
+        });
+        event.preventDefault();
+        this.loadCards(0);
+    }
+
     render() {
         return (
             <InfiniteScroll
@@ -48,10 +79,21 @@ class App extends Component {
                 initialLoad={true}
                 loadMore={this.loadCards}
                 hasMore={this.state.hasMore}
-                loader={<div key={'loading'}><i className="fa fa-spinner fa-spin" />Loading...</div>}
+                loader={<div className="loader" key={'loading'}><i className="fa fa-spinner fa-spin" />Loading...</div>}
                 >
-                <div className="container">
+                <h1>Magic: The Gathering creature cards</h1>
+                <div className="search-bar">
+                    <input type="text" name="search" id="search" value={this.state.name} onChange={(e) => this.handleChange(e)}/>
+                    <input type="submit" value="Search" onClick={(e) => this.search(e)}/>
+                </div>
+                <div className="search-results">
                     {this.state.cards.map((card) => {
+                        if (card.imageUrl === undefined) {
+                            card.imageUrl = this.findMatchingImageUrl(card);
+                        }
+                        if (card.originalType === undefined) {
+                            card.originalType = card.type;
+                        }
                         return (<Card key={card.id} card={card}/>);
                     })}
                 </div>
