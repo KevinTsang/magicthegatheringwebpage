@@ -1,10 +1,6 @@
-.cardLayout {
+.card {
     display: flex;
     flex-flow: column nowrap;
     margin: 5px;
-}
-
-.imageFailure {
-    width: 223px;
-    height: 310px;
+    border: 1px solid black;
 }
