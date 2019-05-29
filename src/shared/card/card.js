@@ -45,7 +45,7 @@ export default class Card extends Component {
 
     render() {
         return (
-            <div className="card">
+            <div className="card fadeIn">
                 <div className="image"><img src={this.state.imageUrl} alt="Magic: The Gathering Card"/></div>
                 <div className="cardHeader">
                     <span>{this.state.name}</span>
