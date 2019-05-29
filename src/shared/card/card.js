@@ -21,22 +21,22 @@ export default class Card extends Component {
             const mana = manaCost.substring(0, 3);
             switch (mana) {
                 case '{U}':
-                    manaCostArray.push(<span className='water cost'>💧</span>);
+                    manaCostArray.push(<span role='img' aria-label='water'>💧</span>);
                     break;
                 case '{W}':
-                    manaCostArray.push(<span className='light cost'>☀️</span>);
+                    manaCostArray.push(<span role='img' aria-label='plain'>☀️</span>);
                     break;
                 case '{R}':
-                    manaCostArray.push(<span className='fire cost'>🔥</span>);
+                    manaCostArray.push(<span role='img' aria-label='mountain'>🔥</span>);
                     break;
                 case '{G}':
-                    manaCostArray.push(<span className='forest cost'>🌲</span>);
+                    manaCostArray.push(<span role='img' aria-label='forest'>🌲</span>);
                     break;
                 case '{B}':
-                    manaCostArray.push(<span className='dark cost'>💀</span>);
+                    manaCostArray.push(<span role='img' aria-label='swamp'>💀</span>);
                     break;
                 default:
-                    manaCostArray.push(<span className='neutral cost'>{mana.substring(1,2)}</span>);
+                    manaCostArray.push(<span role='img' aria-label='neutral' className="neutral">{mana.substring(1,2)}</span>);
                     break;
             }
         }
@@ -46,8 +46,8 @@ export default class Card extends Component {
     render() {
         return (
             <div className="card">
-                <div><img src={this.state.imageUrl} alt="Magic: The Gathering Card"/></div>
-                <div>
+                <div className="image"><img src={this.state.imageUrl} alt="Magic: The Gathering Card"/></div>
+                <div className="cardHeader">
                     <span>{this.state.name}</span>
                     <span>{this.manaCost(this.state.manaCost, [])}</span>
                 </div>

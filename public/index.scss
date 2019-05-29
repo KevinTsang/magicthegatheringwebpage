@@ -1,3 +1,7 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 h1 {
     margin: 20px;
     text-align: center;
@@ -17,4 +21,31 @@ h1 {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+}
+
+.card {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.cardHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.image {
+    align-self: center;
+}
+
+.neutral {
+    border-radius: 50px;
+    font-size: 18px;
+    background: gray;
+    color: #fff;
+    text-align: center;
 }
