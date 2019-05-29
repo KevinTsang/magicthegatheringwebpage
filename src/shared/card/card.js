@@ -21,7 +21,7 @@ export default class Card extends Component {
             const mana = manaCost.substring(0, 3);
             switch (mana) {
                 case '{U}':
-                    manaCostArray.push(<span role='img' aria-label='water'>💧</span>);
+                    manaCostArray.push(<span role='img' aria-label='island'>💧</span>);
                     break;
                 case '{W}':
                     manaCostArray.push(<span role='img' aria-label='plain'>☀️</span>);
