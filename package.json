@@ -6,6 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "test": "react-scripts test --env=jsdom",
+    "debug": "react-scripts debug",
     "build": "webpack"
   },
   "keywords": [],
@@ -13,12 +14,15 @@
   "license": "UNLICENSED",
   "dependencies": {
     "font-awesome": "^4.7.0",
+    "jasmine": "^3.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-infinite-scroller": "^1.2.4",
-    "react-scripts": "^3.0.1"
+    "react-scripts": "^3.0.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "react-unit": "^3.0.3",
     "webpack-cli": "^3.3.2"
   },
   "browserslist": {
