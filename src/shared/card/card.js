@@ -14,8 +14,14 @@ export default class Card extends Component {
         this.manaCost = this.manaCost.bind(this);
     }
 
+    /**
+     * Creates an array of mana cost emoji elements
+     * recursively based on the input string
+     * @param {string} manaCost 
+     * @param {Array<HTMLSpanElement>} manaCostArray 
+     */
     manaCost(manaCost, manaCostArray) {
-        if (manaCost.length === 0) {
+        if (!manaCost) {
             return manaCostArray.map((cost) => cost);
         } else {
             const mana = manaCost.substring(0, 3);
@@ -43,6 +49,10 @@ export default class Card extends Component {
         return this.manaCost(manaCost.substring(3), manaCostArray);
     }
 
+    /**
+     * Renders a single card consisting of a name, mana cost,
+     * type, artist, and set name
+     */
     render() {
         return (
             <div className="card fadeIn">
