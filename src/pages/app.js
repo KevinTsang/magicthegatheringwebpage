@@ -24,7 +24,7 @@ export default class App extends Component {
         this.findMatchingImageUrl = this.findMatchingImageUrl.bind(this);
         this.search = this.search.bind(this);
         this.orderBy = this.orderBy.bind(this);
-        this.retrieveFromImageFromServer = this.retrieveFromImageFromServer.bind(this);
+        this.retrieveFromImageFromServer = this.retrieveImageFromServer.bind(this);
         this.retrieveImageLocally = this.retrieveImage.bind(this);
     }
 
@@ -55,9 +55,23 @@ export default class App extends Component {
             return results.json();
         }).then((cardArray) => {
             const cards = cardArray.cards;
-            this.setState({
-                cards: this.state.cards.concat(cards),
-                pageNumber: this.state.pageNumber + 1,
+            
+            // This will set the original type for a card to its type if it doesn't exist
+            cards.forEach((card) => {
+                if (!card.originalType) {
+                    card.originalType = card.type;
+                }                
+            });
+
+            // This will retrieve a matching imageUrl if the card does not have one
+            const urlPromises = cards.filter((card) => !card.imageUrl)
+                .map((card) => this.findMatchingImageUrl(card, this.state.cards).then(newUrl => card.imageUrl = newUrl));
+            
+            return Promise.all(urlPromises).then((imageUrls) => {
+                this.setState({
+                    cards: this.state.cards.concat(cards),
+                    pageNumber: this.state.pageNumber + 1,
+                });
             });
         });
     }
@@ -81,10 +95,10 @@ export default class App extends Component {
      * Retrieves a card from the Magic: The Gathering server and returns back an imageUrl
      * @param {Card} card 
      */
-    async retrieveFromImageFromServer(card) {
-        await fetch(this.baseUrl + `&name=${card.name}`).then(
+    retrieveImageFromServer(card) {
+        return fetch(this.baseUrl + `&name=${card.name}`).then(
             results => results.json()).then((cardArray) => {
-                return this.retrieveImage(card, cardArray);
+                return this.retrieveImage(card, cardArray.cards);
             });
     }
 
@@ -94,10 +108,10 @@ export default class App extends Component {
      * from the cards array and saves it to the current card's imageUrl property
      * @param {Card} card 
      */
-    findMatchingImageUrl(card, cardArray) {
+    async findMatchingImageUrl(card, cardArray) {
         let imageUrl = this.retrieveImage(card, cardArray);
         if (!imageUrl) {
-            imageUrl = this.retrieveFromImageFromServer(card);
+            imageUrl = await this.retrieveImageFromServer(card);
         }
 
         return imageUrl;
@@ -161,12 +175,6 @@ export default class App extends Component {
                 </div>
                 <div className="search-results">
                     {this.state.cards.map((card) => {
-                        if (card.imageUrl === undefined) {
-                            card.imageUrl = this.findMatchingImageUrl(card, this.state.cards);
-                        }
-                        if (card.originalType === undefined) {
-                            card.originalType = card.type;
-                        }
                         return (<Card key={card.id} card={card}/>);
                     })}
                 </div>
