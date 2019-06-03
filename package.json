@@ -22,7 +22,8 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "react-unit": "^3.0.3",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.2",
     "webpack-cli": "^3.3.2"
   },
   "browserslist": {

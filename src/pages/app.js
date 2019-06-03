@@ -46,14 +46,14 @@ export default class App extends Component {
         if (this.state.name || this.state.searchedOnce) {
             url += '&name=' + this.state.name;
         }
-        fetch(url).then((results) => {
+        return fetch(url).then((results) => {
             if (!pageNumber || pageNumber === 1) {
                 this.setState({
                     totalCount: results.headers.get('Total-Count')
                 });
             }
             return results.json();
-        }).then((cardArray) => {
+        }).then(async (cardArray) => {
             const cards = cardArray.cards;
             
             // This will set the original type for a card to its type if it doesn't exist
@@ -67,11 +67,10 @@ export default class App extends Component {
             const urlPromises = cards.filter((card) => !card.imageUrl)
                 .map((card) => this.findMatchingImageUrl(card, this.state.cards).then(newUrl => card.imageUrl = newUrl));
             
-            return Promise.all(urlPromises).then((imageUrls) => {
-                this.setState({
-                    cards: this.state.cards.concat(cards),
-                    pageNumber: this.state.pageNumber + 1,
-                });
+            await Promise.all(urlPromises);
+            this.setState({
+                cards: this.state.cards.concat(cards),
+                pageNumber: this.state.pageNumber + 1,
             });
         });
     }
@@ -95,11 +94,10 @@ export default class App extends Component {
      * Retrieves a card from the Magic: The Gathering server and returns back an imageUrl
      * @param {Card} card 
      */
-    retrieveImageFromServer(card) {
-        return fetch(this.baseUrl + `&name=${card.name}`).then(
-            results => results.json()).then((cardArray) => {
-                return this.retrieveImage(card, cardArray.cards);
-            });
+    async retrieveImageFromServer(card) {
+        const results = await fetch(this.baseUrl + `&name=${card.name}`);
+        const cardArray = await results.json();
+        return this.retrieveImage(card, cardArray.cards);
     }
 
     /**
