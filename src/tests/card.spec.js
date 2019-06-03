@@ -1,11 +1,10 @@
-import Enzyme, { mount, shallow } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Card from '../shared/card/card';
 var React = require('react');
 
 describe('Tests for the card component', () => {
     var component;
-    var componentInstance;
     var card;
     
     beforeEach(() => {
@@ -21,7 +20,6 @@ describe('Tests for the card component', () => {
             originalType: 'Creature - Bird',
         };
         component = mount(<Card key={card.id} card={card} />);
-        componentInstance = component.instance();
     });
 
     it('expect component to have all the properties of the card passed in', () => {
@@ -33,7 +31,7 @@ describe('Tests for the card component', () => {
     });
 
     it('expect to display name and manaCost properly', () => {
-        var cardHeader = component.find('.cardHeader').children();
+        var cardHeader = component.find('.card-header').children();
         var cardName = cardHeader.at(0).text();
         var manaCost = cardHeader.at(1).text();
         expect(cardName).toEqual(card.name);

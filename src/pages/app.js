@@ -15,7 +15,6 @@ export default class App extends Component {
             totalCount: 1,
             name: '',
             orderBy: 'name',
-            searchedOnce: false
         };
 
         this.loadCards = this.loadCards.bind(this);
@@ -43,7 +42,7 @@ export default class App extends Component {
     loadCards(pageNumber) {
         let url = this.baseUrl + `&pageSize=20&page=${pageNumber}`;
         url += '&orderBy=' + this.state.orderBy;
-        if (this.state.name || this.state.searchedOnce) {
+        if (this.state.name) {
             url += '&name=' + this.state.name;
         }
         return fetch(url).then((results) => {
@@ -81,6 +80,7 @@ export default class App extends Component {
      * @param {Card[]} cardArray List of cards to try and find an imageUrl property to bind
      */
     retrieveImage(card, cardArray) {
+        // TODO: should replace with a hashmap since the cards already come with ids
         for (let i = 0; i < cardArray.length; i++) {
             if (card.name === cardArray[i].name &&
                 cardArray[i].imageUrl !== undefined) {
@@ -92,7 +92,7 @@ export default class App extends Component {
 
     /**
      * Retrieves a card from the Magic: The Gathering server and returns back an imageUrl
-     * @param {Card} card 
+     * @param {Card} card The card that's missing an imageUrl
      */
     async retrieveImageFromServer(card) {
         const results = await fetch(this.baseUrl + `&name=${card.name}`);
@@ -104,7 +104,7 @@ export default class App extends Component {
      * If a card object is missing an imageUrl property,
      * then it finds a corresponding one from a variation that has the same name
      * from the cards array and saves it to the current card's imageUrl property
-     * @param {Card} card 
+     * @param {Card} card The card that's missing an imageUrl
      */
     async findMatchingImageUrl(card, cardArray) {
         let imageUrl = this.retrieveImage(card, cardArray);
@@ -117,7 +117,7 @@ export default class App extends Component {
 
     /**
      * Sets the name of the card to search by from the search box
-     * @param {event} event 
+     * @param {event} event Event linked to search box
      */
     handleChange(event) {
         this.setState({
@@ -145,9 +145,7 @@ export default class App extends Component {
         this.setState({
             cards: [],
             pageNumber: 0,
-            searchedOnce: true,
-        });
-        this.loadCards(0);
+        }, () => this.loadCards(0));
     }
 
     /**
@@ -164,12 +162,12 @@ export default class App extends Component {
                 >
                 <h1>Magic: The Gathering creature cards</h1>
                 <div className="search-bar">
-                    <input type="text" name="search" id="search" value={this.state.name} onChange={(e) => this.handleChange(e)}/>
-                    <input type="submit" value="Search" onClick={(e) => this.search(e)}/>
+                    <input type="text" name="search" id="search" value={this.state.name} onChange={this.handleChange}/>
+                    <input type="submit" id="submit" value="Search" onClick={this.search}/>
                     <span>Order by: </span>
-                    <input type="radio" name="orderBy" value="name" checked={this.state.orderBy === "name"} onChange={e => this.orderBy(e)} />Name
-                    <input type="radio" name="orderBy" value="setName" checked={this.state.orderBy === "setName"} onChange={e => this.orderBy(e)} />Set Name
-                    <input type="radio" name="orderBy" value="artist" checked={this.state.orderBy === "artist"} onChange={e => this.orderBy(e)} />Artist
+                    <input type="radio" id="orderByName" name="orderBy" value="name" checked={this.state.orderBy === "name"} onChange={this.orderBy} />Name
+                    <input type="radio" id="orderBySetName" name="orderBy" value="setName" checked={this.state.orderBy === "setName"} onChange={this.orderBy} />Set Name
+                    <input type="radio" id="orderByArtist" name="orderBy" value="artist" checked={this.state.orderBy === "artist"} onChange={this.orderBy} />Artist
                 </div>
                 <div className="search-results">
                     {this.state.cards.map((card) => {
